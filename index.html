@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>VocalEdge — Speak English as sharply as you think</title>
+<meta name="description" content="The AI clarity coach built for Indian professionals. Feedback tuned to your exact mother-tongue patterns. 10 minutes a day.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<!-- ====== CONFIG: fill these two, everything else just works ====== -->
+<script>
+const CHECKOUT_URL = "";   // paste your Paddle / Lemon Squeezy checkout link when ready; empty = waitlist mode
+const GOATCOUNTER  = "";   // optional free analytics: e.g. "https://vocaledge.goatcounter.com/count" (goatcounter.com)
+</script>
+<!-- ================================================================ -->
+<style>
+:root{
+  --ink:#101318;--ink2:#171B22;--card:#1D222B;--line:#2A313C;
+  --txt:#F2F4F6;--dim:#98A2AE;--dim2:#6C7683;
+  --gold:#C9A24B;--goldL:#E4CB8E;--teal:#19B39A;--tealD:#0E6B60;--red:#E06B64;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--ink);color:var(--txt);line-height:1.6;-webkit-font-smoothing:antialiased}
+.wrap{max-width:1020px;margin:0 auto;padding:0 22px}
+.serif{font-family:'Fraunces',serif}
+nav{display:flex;align-items:center;justify-content:space-between;padding:20px 0}
+.logo{font-weight:800;font-size:1.15rem;letter-spacing:-.02em}
+.logo b{color:var(--gold)}
+.navchip{font-size:.72rem;font-weight:700;color:var(--goldL);border:1px solid rgba(201,162,75,.4);border-radius:20px;padding:7px 14px}
+.hero{padding:64px 0 40px;text-align:center}
+.pill{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--teal);background:rgba(25,179,154,.1);border:1px solid rgba(25,179,154,.3);border-radius:20px;padding:7px 16px;margin-bottom:22px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(2.1rem,5.6vw,3.4rem);line-height:1.08;letter-spacing:-.02em;margin-bottom:18px}
+h1 em{font-style:normal;color:var(--goldL)}
+.sub{color:var(--dim);font-size:1.06rem;max-width:640px;margin:0 auto 30px}
+.sub b{color:var(--txt)}
+.cta{display:inline-block;background:linear-gradient(135deg,var(--goldL),var(--gold));color:#241a06;font-weight:800;font-size:1rem;border:none;border-radius:30px;padding:17px 34px;cursor:pointer;text-decoration:none;box-shadow:0 14px 34px -12px rgba(201,162,75,.55);transition:transform .2s}
+.cta:active{transform:scale(.97)}
+.cta-sub{font-size:.76rem;color:var(--dim2);margin-top:12px}
+.strike{text-decoration:line-through;color:var(--dim2)}
+/* demo card */
+.demo{margin:52px auto 0;max-width:660px;background:var(--card);border:1px solid var(--line);border-radius:18px;padding:26px;text-align:left;box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.demo .lab{font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--dim2);margin-bottom:14px}
+.wavebar{display:flex;align-items:center;gap:3px;height:44px;margin-bottom:18px}
+.wavebar i{width:4px;border-radius:2px;background:var(--tealD)}
+.said{font-size:1.05rem;line-height:2.1}
+.w{padding:3px 7px;border-radius:6px}
+.w.ok{background:rgba(25,179,154,.12);color:#9ADCCF}
+.w.bad{background:rgba(224,107,100,.14);color:#F0A9A4;border-bottom:2px solid var(--red);cursor:pointer;position:relative}
+.fixrow{display:flex;gap:12px;align-items:center;margin-top:18px;background:var(--ink2);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+.fixrow .ic{width:38px;height:38px;border-radius:50%;background:rgba(201,162,75,.14);display:flex;align-items:center;justify-content:center;color:var(--goldL);font-weight:800;flex-shrink:0}
+.fixrow p{font-size:.85rem;color:var(--dim)}
+.fixrow p b{color:var(--txt)}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;padding:56px 0 8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+.stat .n{font-family:'Fraunces',serif;font-size:1.9rem;color:var(--goldL)}
+.stat .d{font-size:.78rem;color:var(--dim);margin-top:6px}
+section{padding:56px 0}
+.k{font-size:.7rem;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--teal);margin-bottom:10px}
+h2{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(1.5rem,3.4vw,2.1rem);letter-spacing:-.01em;margin-bottom:14px}
+.lead{color:var(--dim);max-width:620px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:30px}
+.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px}
+.step .n{width:34px;height:34px;border-radius:50%;background:rgba(25,179,154,.12);color:var(--teal);font-weight:800;display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.step h3{font-size:.98rem;margin-bottom:6px}
+.step p{font-size:.83rem;color:var(--dim)}
+.langs{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+.lang{font-size:.82rem;font-weight:600;border:1px solid var(--line);border-radius:20px;padding:9px 16px;color:var(--dim)}
+.lang.hl{border-color:rgba(201,162,75,.5);color:var(--goldL)}
+/* pricing */
+.price{max-width:520px;margin:0 auto;background:var(--card);border:1px solid rgba(201,162,75,.35);border-radius:20px;padding:34px;text-align:center;box-shadow:0 30px 70px -30px rgba(0,0,0,.65)}
+.price .tag{font-size:.7rem;font-weight:800;letter-spacing:.12em;color:#241a06;background:linear-gradient(135deg,var(--goldL),var(--gold));display:inline-block;border-radius:16px;padding:6px 14px;margin-bottom:16px}
+.price .amt{font-family:'Fraunces',serif;font-size:3rem;color:var(--txt)}
+.price .amt span{font-size:1rem;color:var(--dim)}
+.plist{margin:20px 0 26px;text-align:left}
+.plist div{font-size:.9rem;color:var(--dim);padding:7px 0 7px 28px;position:relative}
+.plist div::before{content:"✓";position:absolute;left:2px;color:var(--teal);font-weight:800}
+.guarantee{font-size:.76rem;color:var(--dim2);margin-top:14px}
+/* faq */
+.faq{max-width:640px;margin:0 auto}
+.faq details{border-bottom:1px solid var(--line);padding:16px 0}
+.faq summary{cursor:pointer;font-weight:600;font-size:.95rem}
+.faq p{font-size:.86rem;color:var(--dim);margin-top:10px}
+footer{padding:44px 0 60px;text-align:center;color:var(--dim2);font-size:.76rem;border-top:1px solid var(--line);margin-top:40px}
+/* modal */
+.modal{position:fixed;inset:0;background:rgba(10,12,16,.8);display:none;align-items:center;justify-content:center;z-index:50;padding:20px}
+.modal.on{display:flex}
+.mcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:32px;max-width:440px;width:100%;text-align:center}
+.mcard h3{font-family:'Fraunces',serif;font-size:1.4rem;margin-bottom:10px}
+.mcard p{font-size:.88rem;color:var(--dim);margin-bottom:20px}
+.mcard input{width:100%;background:var(--ink);border:1px solid var(--line);border-radius:10px;padding:14px;color:var(--txt);font-size:.95rem;margin-bottom:12px;outline:none}
+.mcard input:focus{border-color:var(--gold)}
+.note{font-size:.7rem;color:var(--dim2);margin-top:12px}
+@media(max-width:720px){.stats,.steps{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav>
+    <div class="logo">Vocal<b>Edge</b></div>
+    <div class="navchip">Founding cohort · limited</div>
+  </nav>
+
+  <div class="hero">
+    <div class="pill">Built for Indian professionals abroad</div>
+    <h1>Speak English as <em>sharply</em> as you think.</h1>
+    <p class="sub">You're brilliant in your head — and underestimated in meetings. VocalEdge is the AI clarity coach that pinpoints the <b>exact sounds</b> that make listeners ask "sorry, what?" — tuned to <b>your mother tongue's</b> patterns — and fixes them in 10 minutes a day. <b>Keep your accent. Gain the <b>edge</b>.</b></p>
+    <a class="cta" href="#" onclick="return goCheckout('hero')">Become a founding member — $11.99/mo</a>
+    <div class="cta-sub"><span class="strike">$19.99</span> founding price, locked for life · cancel anytime · 7-day money-back</div>
+
+    <div class="demo">
+      <div class="lab">Product preview — what a session looks like</div>
+      <div class="wavebar" id="wave"></div>
+      <div class="said">
+        <span class="w ok">We</span> <span class="w ok">should</span> <span class="w bad">verify</span> <span class="w ok">the</span> <span class="w ok">report</span> <span class="w bad">thoroughly</span> <span class="w ok">before</span> <span class="w ok">the</span> <span class="w ok">meeting.</span>
+      </div>
+      <div class="fixrow">
+        <div class="ic">v</div>
+        <p><b>"verify" → your /v/ is becoming /w/.</b> Touch your top teeth to your bottom lip and push air: <b>vvv</b>-erify. Common for Tamil &amp; Hindi speakers — try it again, I'm listening.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n">10 min</div><div class="d">a day, on your phone — no classes, no scheduling, no embarrassment</div></div>
+    <div class="stat"><div class="n">Your L1</div><div class="d">feedback tuned to Tamil, Telugu, Hindi &amp; more — not generic "repeat after me"</div></div>
+    <div class="stat"><div class="n">Weeks</div><div class="d">to audibly clearer speech on the words your work depends on</div></div>
+  </div>
+
+  <section>
+    <div class="k">How it works</div>
+    <h2>Pinpoint. Hear the fix. Nail it. Repeat.</h2>
+    <div class="steps">
+      <div class="step"><div class="n">1</div><h3>Speak a work phrase</h3><p>Interview answers, meeting lines, presentations — the 200 phrases your career actually runs on.</p></div>
+      <div class="step"><div class="n">2</div><h3>See the exact sound</h3><p>Not a vague score. The precise phoneme, stress or rhythm that's costing you clarity — because we know your mother tongue's patterns.</p></div>
+      <div class="step"><div class="n">3</div><h3>Hear it, match it, track it</h3><p>Hear the clear version, retry, and watch your Clarity Score climb week over week. Progress you can literally hear.</p></div>
+    </div>
+    <div class="langs">
+      <div class="lang hl">Tamil</div><div class="lang hl">Telugu</div><div class="lang hl">Hindi</div>
+      <div class="lang">Kannada</div><div class="lang">Malayalam</div><div class="lang">Marathi</div>
+      <div class="lang">Bengali</div><div class="lang">Punjabi</div><div class="lang">Gujarati</div>
+    </div>
+  </section>
+
+  <section id="pricing">
+    <div class="price">
+      <div class="tag">FOUNDING MEMBER</div>
+      <div class="amt">$11.99<span>/month</span></div>
+      <div class="plist">
+        <div>Daily 10-minute clarity sessions, tuned to your mother tongue</div>
+        <div>The 200 work-critical phrases: interviews, meetings, presentations</div>
+        <div>Your Clarity Score — hear yourself improve week by week</div>
+        <div>Founding price locked for life + direct line to shape the product</div>
+      </div>
+      <a class="cta" href="#" onclick="return goCheckout('pricing')">Start as a founding member</a>
+      <div class="guarantee">7-day money-back guarantee, no questions asked. Cancel anytime.</div>
+    </div>
+  </section>
+
+  <section>
+    <div class="faq">
+      <div class="k">Questions</div>
+      <details><summary>Will this erase my accent?</summary><p>No — and it shouldn't. Your accent is identity. VocalEdge fixes the specific sounds and rhythms that cause misunderstanding, so you're heard the first time. Clarity, not erasure.</p></details>
+      <details><summary>How is this different from ELSA or generic apps?</summary><p>Generic apps give every human the same course. VocalEdge is built around the specific patterns of Indian languages — the v/w swap, the th→t/d, syllable stress — so feedback lands on <i>your</i> actual habits from day one.</p></details>
+      <details><summary>I'm busy. How much time does it really take?</summary><p>One focused 10-minute session a day, on your phone, in private. Less time than your commute playlist.</p></details>
+      <details><summary>What if it doesn't work for me?</summary><p>7-day full refund, no questions. And founding members talk directly to the builder — the product bends around you.</p></details>
+    </div>
+  </section>
+
+  <footer>
+    VocalEdge · Built openly by an independent builder · Founding cohort is limited so early feedback stays personal<br>
+    support@vocaledge.app (placeholder — set your real email)
+  </footer>
+</div>
+
+<!-- waitlist modal (fake-door fallback when CHECKOUT_URL is empty) -->
+<div class="modal" id="modal">
+  <div class="mcard">
+    <h3>You're early — founding checkout opens this week.</h3>
+    <p>Leave your email and we'll reserve your <b>$11.99/mo founding price (locked for life)</b>. First 200 only.</p>
+    <input type="email" id="em" placeholder="you@email.com">
+    <a class="cta" style="display:block" href="#" onclick="return saveEmail()">Reserve my founding price</a>
+    <div class="note">No spam. One email when checkout opens.</div>
+  </div>
+</div>
+
+<script>
+/* ---------- tracking ---------- */
+function track(ev){
+  try{
+    const k='ve_'+ev; localStorage.setItem(k,(parseInt(localStorage.getItem(k)||'0')+1));
+    if(GOATCOUNTER){ new Image().src=GOATCOUNTER+'?p='+encodeURIComponent(ev)+'&rnd='+Math.random(); }
+  }catch(e){}
+}
+track('visit');
+function goCheckout(src){
+  track('cta_'+src); track('cta_total');
+  if(CHECKOUT_URL){ window.location.href=CHECKOUT_URL; }
+  else{ document.getElementById('modal').classList.add('on'); }
+  return false;
+}
+function saveEmail(){
+  const em=document.getElementById('em').value.trim();
+  if(!em||!em.includes('@')){alert('Please enter a valid email');return false;}
+  const l=JSON.parse(localStorage.getItem('ve_emails')||'[]'); l.push({em,t:Date.now()});
+  localStorage.setItem('ve_emails',JSON.stringify(l)); track('email_captured');
+  document.querySelector('.mcard').innerHTML='<h3>Reserved ✓</h3><p>Your founding price is locked. Watch your inbox this week.</p>';
+  return false;
+}
+/* view your numbers: open the page with ?admin=1 */
+if(location.search.includes('admin=1')){
+  const g=k=>localStorage.getItem('ve_'+k)||'0';
+  alert('Visits: '+g('visit')+'\nCTA clicks: '+g('cta_total')+'\nEmails: '+(JSON.parse(localStorage.getItem('ve_emails')||'[]').length)
+   +'\n\nCTR = clicks / visits. Gate 0 pass = 6-8%+.\nNote: localStorage counts THIS browser only — use GoatCounter (free) for real totals.');
+}
+/* modal close on backdrop */
+document.getElementById('modal').onclick=e=>{if(e.target.id==='modal')e.target.classList.remove('on')};
+/* decorative waveform */
+(function(){const w=document.getElementById('wave');const hs=[.3,.6,.9,.5,.8,1,.6,.4,.7,.95,.55,.35,.75,.5,.85,.4,.65,.9,.45,.6,.3,.8,.55,.7,.4,.9,.6,.35,.75,.5];
+hs.forEach((h,i)=>{const b=document.createElement('i');b.style.height=(h*100)+'%';if(i>7&&i<12)b.style.background='#E06B64';w.appendChild(b)})})();
+</script>
+</body>
+</html>
