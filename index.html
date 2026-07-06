@@ -237,8 +237,8 @@ footer a:hover{color:var(--teal-light)}
 <section class="section wrap" id="pricing">
   <div class="price reveal">
     <span class="tag">Founding member</span>
-    <div class="amt disp">$11.99<span>/month</span></div>
-    <div class="was"><s>$19.99</s> — locked for life</div>
+    <div class="amt disp"><span id="veprice">$6.99</span><span>/month</span></div>
+    <div class="was"><s id="vewas">$13.99</s> — locked for life</div>
     <div class="plist">
       <div>Daily 10-minute clarity sessions, tuned to your mother tongue</div>
       <div>The 200 work-critical phrases: interviews, meetings, presentations</div>
@@ -246,7 +246,22 @@ footer a:hover{color:var(--teal-light)}
       <div>Founding price locked + a direct line to shape the product</div>
     </div>
     <a class="btn btn-primary" href="#" onclick="return goCheckout('pricing')" style="width:100%;justify-content:center">Become a founding member</a>
-    <div class="guarantee">7-day money-back guarantee, no questions asked.</div>
+    <div class="guarantee">Cancel anytime · full refund before launch · no questions asked.</div>
+  </div>
+</section>
+
+<section class="section wrap">
+  <div class="price reveal" style="max-width:640px;border-color:var(--teal-light)">
+    <span class="tag">Fair &amp; transparent</span>
+    <div class="disp" style="font-size:1.4rem;line-height:1.25;margin:8px 0 6px">No traps. Cancel or get a refund in one message.</div>
+    <p style="font-size:.9rem;color:var(--dim);margin:0 0 4px">Your total trust matters more to us than any single sale. So here is exactly how this works — no fine print:</p>
+    <div class="plist">
+      <div><b>Cancel anytime, yourself.</b> Manage or cancel your subscription straight from your receipt, through Dodo's secure customer portal. No app to download, no phone call, no "email us to cancel" maze.</div>
+      <div><b>Full refund, no questions.</b> Changed your mind? Reply to your receipt or email us — we refund in full, anytime before launch. You carry zero risk.</div>
+      <div><b>A real invoice, every time.</b> Every payment comes with a proper tax invoice in your inbox, downloadable whenever you need it.</div>
+      <div><b>You're pre-ordering — and we say so plainly.</b> The app ships within two weeks. If we're late, or it is simply not for you, you get every rupee back. Your founding price stays locked for life.</div>
+    </div>
+    <div class="guarantee">Payments, invoices and refunds are handled by Dodo Payments (Merchant of Record). Any question at all — just email us and a human replies.</div>
   </div>
 </section>
 
@@ -256,7 +271,8 @@ footer a:hover{color:var(--teal-light)}
     <details><summary>Will this erase my accent?</summary><p>No — and it shouldn't. Your accent is identity. VocalEdge fixes the specific sounds that cause misunderstanding, so you're heard the first time. Clarity, not erasure.</p></details>
     <details><summary>How is this different from ELSA or generic apps?</summary><p>Generic apps give every human the same course. VocalEdge is built around the patterns of Indian languages — the v/w swap, th→t/d, syllable stress — so feedback lands on your actual habits from day one.</p></details>
     <details><summary>How much time does it really take?</summary><p>One focused 10-minute session a day, on your phone, in private. Less than your commute playlist.</p></details>
-    <details><summary>What if it doesn't work for me?</summary><p>7-day full refund, no questions. And founding members talk directly to the builder — the product bends around you.</p></details>
+    <details><summary>What if it doesn't work for me?</summary><p>Full refund, no questions — cancel yourself anytime from your receipt, or just email us, anytime before launch. And founding members talk directly to the builder — the product bends around you.</p></details>
+    <details><summary>There's no app store yet — how do I cancel?</summary><p>You don't need one. Every payment comes with a receipt linking to Dodo's secure customer portal, where you manage or cancel in a couple of taps — or just email us and we'll handle it the same day. You are never locked in.</p></details>
   </div>
 </section>
 
@@ -277,7 +293,7 @@ footer a:hover{color:var(--teal-light)}
 <div class="modal" id="modal">
   <div class="mcard">
     <h3 class="disp">You're early — founding checkout opens this week.</h3>
-    <p>Leave your email and we'll reserve your <b>$11.99/mo founding price, locked for life</b>. First 200 only.</p>
+    <p>Leave your email and we'll reserve your <b>founding price — the lowest VocalEdge will ever be, locked for life</b>. First 200 only.</p>
     <input type="email" id="em" placeholder="you@email.com" autocomplete="email">
     <a class="btn btn-primary" href="#" onclick="return saveEmail()">Reserve my spot</a>
     <div class="note">No spam. One email when checkout opens.</div>
@@ -319,6 +335,18 @@ function saveEmail(){
 }
 
 (function(){ var a=document.getElementById('supportLink'); if(a&&SUPPORT_EMAIL){ a.textContent=SUPPORT_EMAIL; a.href='mailto:'+SUPPORT_EMAIL; } })();
+
+/* geo-detect founding price via timezone — India ₹199, else $6.99. No network call; safe $6.99 default. */
+(function(){
+  try{
+    var tz=(Intl.DateTimeFormat().resolvedOptions().timeZone||"");
+    var lang=(navigator.language||"").toLowerCase();
+    var india=/Kolkata|Calcutta/i.test(tz) || lang==="en-in" || lang==="hi-in";
+    var p=document.getElementById('veprice'), w=document.getElementById('vewas');
+    if(india){ if(p)p.textContent='₹199'; if(w)w.textContent='₹399'; }
+    else { if(p)p.textContent='$6.99'; if(w)w.textContent='$13.99'; }
+  }catch(e){}
+})();
 
 /* nav frost on scroll */
 var nav=document.getElementById('nav');
