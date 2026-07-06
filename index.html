@@ -14,8 +14,7 @@
 <script>
 const CHECKOUT_URL         = "";                                       // paste live checkout link when ready; empty = waitlist mode
 const GOATCOUNTER          = "https://vocaledge.goatcounter.com/count";
-const WAITLIST_FORM_ACTION = "https://docs.google.com/forms/d/e/1FAIpQLSeYMu4khtCZsTRhp6hqonnBUESsfoADt9s2snZ2CPUPLyhpNQ/formResponse";                                       // Google Form .../formResponse URL
-const WAITLIST_EMAIL_ENTRY = "entry.1500025027";                                       // entry.XXXXXXXXX id for the Email question
+const WAITLIST_ENDPOINT    = "https://formspree.io/f/mwvdzpne";       // Formspree endpoint — reliable email capture
 const SUPPORT_EMAIL        = "cooladi006+vocaledge@gmail.com";         // interim; swap to support@vocaledge.app later
 </script>
 <!-- ================================================================== -->
@@ -304,13 +303,18 @@ function goCheckout(src){
 function saveEmail(){
   var em=document.getElementById('em').value.trim();
   if(!em||em.indexOf('@')<1){ alert('Please enter a valid email'); return false; }
-  try{ var l=JSON.parse(localStorage.getItem('ve_emails')||'[]'); l.push({em:em,t:Date.now()}); localStorage.setItem('ve_emails',JSON.stringify(l)); }catch(e){}
   track('email_captured');
-  if(WAITLIST_FORM_ACTION && WAITLIST_EMAIL_ENTRY){
-    try{ var fd=new FormData(); fd.append(WAITLIST_EMAIL_ENTRY, em);
-      fetch(WAITLIST_FORM_ACTION,{method:'POST',mode:'no-cors',body:fd}).catch(function(){}); }catch(e){}
+  if(WAITLIST_ENDPOINT){
+    var fd=new FormData(); fd.append('email', em);
+    fetch(WAITLIST_ENDPOINT,{method:'POST',body:fd,headers:{'Accept':'application/json'}})
+      .then(function(r){
+        if(r.ok){ document.querySelector('.mcard').innerHTML='<h3 class="disp">Reserved &#10003;</h3><p>Your founding price is locked. Watch your inbox this week.</p>'; }
+        else { alert("That didn't go through — please try again in a moment."); }
+      })
+      .catch(function(){ alert('Network hiccup — please try again.'); });
+  } else {
+    document.querySelector('.mcard').innerHTML='<h3 class="disp">Reserved &#10003;</h3><p>Your founding price is locked. Watch your inbox this week.</p>';
   }
-  document.querySelector('.mcard').innerHTML='<h3 class="disp">Reserved &#10003;</h3><p>Your founding price is locked. Watch your inbox this week.</p>';
   return false;
 }
 
