@@ -12,7 +12,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <!-- ============ CONFIG — fill these two, everything works ============ -->
 <script>
-const CHECKOUT_URL         = "";                                       // paste live checkout link when ready; empty = waitlist mode
+const CHECKOUT_URL_INDIA   = "https://checkout.dodopayments.com/buy/pdt_0NiaZXcMskkkvcaERtwuX?quantity=1"; // ₹199 INR Dodo link — LIVE
+const CHECKOUT_URL_USD     = "https://checkout.dodopayments.com/buy/pdt_0NieOBEXOfPjXKmGIglOU?quantity=1"; // $6.99 USD Dodo link
 const GOATCOUNTER          = "https://vocaledge.goatcounter.com/count";
 const WAITLIST_ENDPOINT    = "https://formspree.io/f/mwvdzpne";       // Formspree endpoint — reliable email capture
 const SUPPORT_EMAIL        = "cooladi006+vocaledge@gmail.com";         // interim; swap to support@vocaledge.app later
@@ -124,6 +125,7 @@ body{
 .plist div::before{content:"";position:absolute;left:4px;top:.42em;width:15px;height:8px;border-left:2.5px solid var(--teal-bright);
   border-bottom:2.5px solid var(--teal-bright);transform:rotate(-45deg)}
 .price .guarantee{font-size:.78rem;color:var(--dim2);margin-top:16px}
+.price .mandate-note{font-size:.76rem;color:var(--dim2);margin-top:10px;line-height:1.45;letter-spacing:.01em}
 
 /* ---------- faq ---------- */
 .faq{max-width:660px;margin:0 auto}
@@ -239,6 +241,7 @@ footer a:hover{color:var(--teal-light)}
     <span class="tag">Founding member</span>
     <div class="amt disp"><span id="veprice">$6.99</span><span>/month</span></div>
     <div class="was"><s id="vewas">$13.99</s> — locked for life</div>
+    <div class="mandate-note" id="vemandate"></div>
     <div class="plist">
       <div>Daily 10-minute clarity sessions, tuned to your mother tongue</div>
       <div>The 200 work-critical phrases: interviews, meetings, presentations</div>
@@ -260,6 +263,7 @@ footer a:hover{color:var(--teal-light)}
       <div><b>Full refund, no questions.</b> Changed your mind? Reply to your receipt or email us — we refund in full, anytime before launch. You carry zero risk.</div>
       <div><b>A real invoice, every time.</b> Every payment comes with a proper tax invoice in your inbox, downloadable whenever you need it.</div>
       <div><b>You're pre-ordering — and we say so plainly.</b> The app ships within two weeks. If we're late, or it is simply not for you, you get every rupee back. Your founding price stays locked for life.</div>
+      <div><b>UPI AutoPay's ₹15,000 ceiling.</b> This is the RBI/NPCI authorization standard applied to every UPI subscription in India — the network's ceiling, not a merchant's. It's a fixed part of how UPI AutoPay works everywhere, VocalEdge included. You are billed <b>₹199/month</b>, precisely, and never a rupee more without your approval.</div>
     </div>
     <div class="guarantee">Payments, invoices and refunds are handled by Dodo Payments (Merchant of Record). Any question at all — just email us and a human replies.</div>
   </div>
@@ -311,7 +315,8 @@ track('visit');
 
 function goCheckout(src){
   track('cta_'+src); track('cta_total');
-  if(CHECKOUT_URL){ window.location.href=CHECKOUT_URL; }
+  var url = VE_IS_INDIA ? CHECKOUT_URL_INDIA : CHECKOUT_URL_USD;
+  if(url){ window.location.href=url; }
   else{ document.getElementById('modal').classList.add('on'); document.getElementById('em').focus(); }
   return false;
 }
@@ -336,15 +341,20 @@ function saveEmail(){
 
 (function(){ var a=document.getElementById('supportLink'); if(a&&SUPPORT_EMAIL){ a.textContent=SUPPORT_EMAIL; a.href='mailto:'+SUPPORT_EMAIL; } })();
 
-/* geo-detect founding price via timezone — India ₹199, else $6.99. No network call; safe $6.99 default. */
+/* geo-detect founding price + checkout link via timezone — India ₹199, else $6.99. No network call; safe $6.99/USD default. */
+var VE_IS_INDIA = false;
 (function(){
   try{
     var tz=(Intl.DateTimeFormat().resolvedOptions().timeZone||"");
     var lang=(navigator.language||"").toLowerCase();
     var india=/Kolkata|Calcutta/i.test(tz) || lang==="en-in" || lang==="hi-in";
-    var p=document.getElementById('veprice'), w=document.getElementById('vewas');
-    if(india){ if(p)p.textContent='₹199'; if(w)w.textContent='₹399'; }
-    else { if(p)p.textContent='$6.99'; if(w)w.textContent='$13.99'; }
+    VE_IS_INDIA = india;
+    var p=document.getElementById('veprice'), w=document.getElementById('vewas'), m=document.getElementById('vemandate');
+    if(india){
+      if(p)p.textContent='₹199'; if(w)w.textContent='₹399';
+      if(m)m.textContent="Paying by UPI AutoPay, you will see an authorization ceiling of ₹15,000, the RBI/NPCI standard for every UPI subscription in India, not your bill. Your card is charged ₹199, exactly, each month.";
+    }
+    else { if(p)p.textContent='$6.99'; if(w)w.textContent='$13.99'; if(m)m.textContent=''; }
   }catch(e){}
 })();
 
