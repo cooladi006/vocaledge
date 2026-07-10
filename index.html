@@ -12,11 +12,15 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <!-- ============ CONFIG — fill these two, everything works ============ -->
 <script>
-const CHECKOUT_URL_INDIA   = "https://checkout.dodopayments.com/buy/pdt_0NiaZXcMskkkvcaERtwuX?quantity=1"; // ₹199 INR Dodo link — LIVE
-const CHECKOUT_URL_USD     = "https://checkout.dodopayments.com/buy/pdt_0NieOBEXOfPjXKmGIglOU?quantity=1"; // $6.99 USD Dodo link
+const CHECKOUT_URL_INDIA   = "https://checkout.dodopayments.com/buy/pdt_0NiaZXcMskkkvcaERtwuX?quantity=1"; // ₹199 INR Dodo link — SECONDARY path only, offered inside the waitlist modal for eager payers. Gate 0 primary KR is email capture, not payment.
+const CHECKOUT_URL_USD     = "https://checkout.dodopayments.com/buy/pdt_0NieOBEXOfPjXKmGIglOU?quantity=1"; // $6.99 USD Dodo link — same secondary role
 const GOATCOUNTER          = "https://vocaledge.goatcounter.com/count";
 const WAITLIST_ENDPOINT    = "https://formspree.io/f/mwvdzpne";       // Formspree endpoint — reliable email capture
-const SUPPORT_EMAIL        = "cooladi006+vocaledge@gmail.com";         // interim; swap to support@vocaledge.app later
+const SUPPORT_EMAIL        = "vocaledge.support@gmail.com";
+// HONEST SOCIAL PROOF — update this manually from real Formspree submission counts. NEVER fabricate or auto-increment this number.
+const WAITLIST_COUNT       = 0; // set to the real current count each time you check Formspree; 0 shows a qualitative line instead of a number
+// REAL LAUNCH COUNTDOWN — leave null until an actual committed date exists. NEVER set a fake/resetting date.
+const LAUNCH_DATE_ISO      = null; // e.g. "2026-08-15T00:00:00+05:30" — set this only when the date is real and committed
 </script>
 <!-- ================================================================== -->
 <style>
@@ -236,6 +240,15 @@ footer a:hover{color:var(--teal-light)}
   </div>
 </section>
 
+<!-- FOUNDER TRANSPARENCY — DRAFT COPY. Replace with Aditya's own words/photo before shipping; authenticity requires his real voice, not ATLAS's. -->
+<section class="section wrap">
+  <div class="price reveal" style="max-width:640px;text-align:left">
+    <span class="tag">Built by one person</span>
+    <p style="font-size:1rem;line-height:1.6;margin:14px 0 0">I'm Aditya. I kept watching sharp, capable colleagues get talked over on calls — not because their English was wrong, but because two or three sounds made people re-ask instead of listen. VocalEdge is me building the fix I wished existed: no accent shaming, just the specific sound that's costing you the room. This page is early and honest about that — you're reserving a spot in something being built in the open, not buying a finished app.</p>
+    <p style="font-size:.85rem;color:var(--dim);margin-top:10px">— Founder, VocalEdge · <span id="supportLinkFounder"></span></p>
+  </div>
+</section>
+
 <section class="section wrap" id="pricing">
   <div class="price reveal">
     <span class="tag">Founding member</span>
@@ -248,8 +261,11 @@ footer a:hover{color:var(--teal-light)}
       <div>Your Clarity Score — hear yourself improve week by week</div>
       <div>Founding price locked + a direct line to shape the product</div>
     </div>
+    <div id="countdownBox" style="display:none;font-size:.8rem;color:var(--dim);margin-bottom:12px"></div>
+    <div id="proofLine" style="font-size:.82rem;color:var(--teal);font-weight:600;margin-bottom:14px"></div>
     <a class="btn btn-primary" href="#" onclick="return goCheckout('pricing')" style="width:100%;justify-content:center">Become a founding member</a>
     <div class="guarantee">Cancel anytime · full refund before launch · no questions asked.</div>
+    <div style="font-size:.72rem;color:var(--dim2);margin-top:14px;letter-spacing:.02em">Secured checkout via Dodo Payments · Visa · Mastercard · RuPay · UPI</div>
   </div>
 </section>
 
@@ -300,7 +316,8 @@ footer a:hover{color:var(--teal-light)}
     <p>Leave your email and we'll reserve your <b>founding price — the lowest VocalEdge will ever be, locked for life</b>. First 200 only.</p>
     <input type="email" id="em" placeholder="you@email.com" autocomplete="email">
     <a class="btn btn-primary" href="#" onclick="return saveEmail()">Reserve my spot</a>
-    <div class="note">No spam. One email when checkout opens.</div>
+    <div class="note" id="modalProofLine">No spam. One email when checkout opens.</div>
+    <a href="#" id="payNowLink" onclick="return payNow()" style="display:block;margin-top:14px;font-size:.82rem;color:var(--dim);text-decoration:underline">Already convinced? Pay now and lock your founding price →</a>
   </div>
 </div>
 
@@ -314,10 +331,19 @@ function track(ev){
 track('visit');
 
 function goCheckout(src){
+  // PRIMARY GATE 0 PATH: always collect email first. Payment is an honest secondary/bonus signal, offered
+  // inside the modal via payNow(), never the default action. This was reversed from a prior version that
+  // sent every visitor straight to live Dodo checkout, skipping email capture entirely — corrected 2026-07-10.
   track('cta_'+src); track('cta_total');
+  document.getElementById('modal').classList.add('on');
+  document.getElementById('em').focus();
+  return false;
+}
+
+function payNow(){
+  track('pay_now_clicked'); track('cta_total');
   var url = VE_IS_INDIA ? CHECKOUT_URL_INDIA : CHECKOUT_URL_USD;
-  if(url){ window.location.href=url; }
-  else{ document.getElementById('modal').classList.add('on'); document.getElementById('em').focus(); }
+  window.location.href = url;
   return false;
 }
 
@@ -329,7 +355,7 @@ function saveEmail(){
     var fd=new FormData(); fd.append('email', em);
     fetch(WAITLIST_ENDPOINT,{method:'POST',body:fd,headers:{'Accept':'application/json'}})
       .then(function(r){
-        if(r.ok){ document.querySelector('.mcard').innerHTML='<h3 class="disp">Reserved &#10003;</h3><p>Your founding price is locked. Watch your inbox this week.</p>'; }
+        if(r.ok){ document.querySelector('.mcard').innerHTML='<h3 class="disp">Reserved &#10003;</h3><p>Your founding price is locked. Watch your inbox this week.</p><a href="#" onclick="return payNow()" style="display:block;margin-top:14px;font-size:.82rem;color:var(--dim);text-decoration:underline">Or pay now to lock it in immediately →</a>'; }
         else { alert("That didn't go through — please try again in a moment."); }
       })
       .catch(function(){ alert('Network hiccup — please try again.'); });
@@ -339,7 +365,33 @@ function saveEmail(){
   return false;
 }
 
-(function(){ var a=document.getElementById('supportLink'); if(a&&SUPPORT_EMAIL){ a.textContent=SUPPORT_EMAIL; a.href='mailto:'+SUPPORT_EMAIL; } })();
+(function(){ var a=document.getElementById('supportLink'); if(a&&SUPPORT_EMAIL){ a.textContent=SUPPORT_EMAIL; a.href='mailto:'+SUPPORT_EMAIL; }
+  var a2=document.getElementById('supportLinkFounder'); if(a2&&SUPPORT_EMAIL){ a2.textContent=SUPPORT_EMAIL; a2.href='mailto:'+SUPPORT_EMAIL; a2.style.color='var(--teal)'; } })();
+
+/* HONEST social proof — real manual count only, never fabricated/auto-incremented */
+(function(){
+  var proofEls = [document.getElementById('proofLine'), document.getElementById('modalProofLine')];
+  var msg = (WAITLIST_COUNT && WAITLIST_COUNT > 0)
+    ? WAITLIST_COUNT + ' people have already reserved a founding spot'
+    : 'Be among the first founding members — no spam, one email when checkout opens.';
+  proofEls.forEach(function(el){ if(el) el.textContent = msg; });
+})();
+
+/* REAL countdown — only renders if a genuine committed date is set. Never a fake/resetting timer. */
+(function(){
+  if(!LAUNCH_DATE_ISO) return;
+  var box = document.getElementById('countdownBox');
+  var target = new Date(LAUNCH_DATE_ISO).getTime();
+  function tick(){
+    var diff = target - Date.now();
+    if(diff <= 0){ box.textContent = 'Founding checkout is now open.'; return; }
+    var d = Math.floor(diff/86400000), h = Math.floor((diff%86400000)/3600000);
+    box.textContent = 'Founding checkout opens in ' + d + 'd ' + h + 'h';
+    box.style.display = 'block';
+    setTimeout(tick, 3600000);
+  }
+  tick();
+})();
 
 /* geo-detect founding price + checkout link via timezone — India ₹199, else $6.99. No network call; safe $6.99/USD default. */
 var VE_IS_INDIA = false;
