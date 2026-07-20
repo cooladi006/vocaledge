@@ -97,7 +97,7 @@ def find_weakest_pillar(azure_result):
         for p in w.get("Phonemes", []):
             total_phonemes_seen += 1
             ph = p.get("Phoneme", "").lower()
-            score = p.get("PronunciationAssessment", {}).get("AccuracyScore", 100)
+            score = p.get("AccuracyScore", 100)
             if ph in PHONEME_PILLAR_MAP:
                 pillar = PHONEME_PILLAR_MAP[ph]
                 phoneme_scores.setdefault(pillar, []).append(score)
@@ -107,7 +107,7 @@ def find_weakest_pillar(azure_result):
     print(f"[DIAGNOSTIC] Words parsed: {len(words)}, phonemes seen: {total_phonemes_seen}, "
           f"mapped pillars found: {list(phoneme_scores.keys())}, unmapped phonemes: {unmapped_phonemes}")
 
-    overall = nbest.get("PronunciationAssessment", {}).get("AccuracyScore")
+    overall = nbest.get("AccuracyScore")
     if overall is None:
         raise ValueError(f"Azure response has no overall AccuracyScore. NBest keys: {list(nbest.keys())}")
 
